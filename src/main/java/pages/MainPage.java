@@ -19,8 +19,16 @@ public class MainPage {
     // Блоки с ответами на вопросы
     private By accAnswers = By.xpath(".//*[@class='accordion__panel']");
 
+    // Кнопка закрытия плашки cookies
+    private By cookieButton = By.xpath(".//button[@id='rcc-confirm-button']");
+
     public MainPage(WebDriver driver) {
         this.driver = driver;
+    }
+
+    // Метод закрытия плашки cookies
+    public void clickCookieButton() {
+        driver.findElement(cookieButton).click();
     }
 
     // Метод нажатия на верхнюю кнопку «Заказать»
@@ -41,5 +49,9 @@ public class MainPage {
     // Метод получения текста ответа по его индексу
     public String getAccordionAnswer(int index) {
         return driver.findElements(accAnswers).get(index).getText();
+    }
+    // Метод для проверки отображения ответа
+    public boolean isAccordionAnswerVisible(int index) {
+        return driver.findElements(accAnswers).get(index).isDisplayed();
     }
 }
