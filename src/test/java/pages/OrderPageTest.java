@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OrderPageTest {
 
@@ -22,15 +22,21 @@ public class OrderPageTest {
         driver.quit();
     }
 
-    // Проверка ввода и отображения названия станции метро в форме заказа
+    // Проверка заполнения формы - Для кого самокат
     @Test
-    public void checkMetroStation() {
+    public void checkNextButton() {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickOrderButtonHeader();
 
         OrderPage orderPage = new OrderPage(driver);
+        orderPage.setName("Кирилл");
+        orderPage.setSurname("Семенов");
+        orderPage.setAddress("Санкт-Петербург, улица тест, 10");
         orderPage.setMetroStation();
+        orderPage.setPhone("89991234567");
 
-        assertEquals("Чистые пруды", orderPage.getMetroStation());
+        orderPage.clickNextButton();
+
+        assertTrue(orderPage.isDeliveryDateDisplayed());
     }
 }
