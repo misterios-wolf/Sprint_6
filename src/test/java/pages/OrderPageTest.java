@@ -2,14 +2,17 @@ package pages;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OrderPageTest {
 
@@ -17,8 +20,17 @@ public class OrderPageTest {
 
     @BeforeEach
     public void setUp() {
-        driver = new ChromeDriver();
+        String browser = System.getProperty("browser", "chrome");
+
+        if (browser.equals("firefox")) {
+            driver = new FirefoxDriver();
+        } else {
+            driver = new ChromeDriver();
+        }
+
         driver.get("https://qa-scooter.education-services.ru/");
+        // Для запуска тестов в Firefox выполни команду:
+        // mvn "-Dtest=pages.OrderPageTest" "-Dbrowser=firefox" test
     }
 
     @AfterEach
@@ -36,7 +48,7 @@ public class OrderPageTest {
     // Проверка заполнения формы - Для кого самокат
     @ParameterizedTest
     @MethodSource("orderData")
-    public void checkNextButton(String name, String surname, String address, String phone, String button) {
+    public void checkOrder(String name, String surname, String address, String phone, String button) {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickCookieButton();
 

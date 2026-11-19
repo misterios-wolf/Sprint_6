@@ -50,6 +50,7 @@ public class MainPage {
     public String getAccordionAnswer(int index) {
         return driver.findElements(accAnswers).get(index).getText();
     }
+
     // Метод для проверки отображения ответа
     public boolean isAccordionAnswerVisible(int index) {
         return driver.findElements(accAnswers).get(index).isDisplayed();
