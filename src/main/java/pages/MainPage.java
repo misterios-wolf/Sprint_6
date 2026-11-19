@@ -11,7 +11,7 @@ public class MainPage {
     private By orderButtonHeader = By.xpath(".//button[@class='Button_Button__ra12g']");
 
     // Кнопка «Заказать» внизу страницы
-    private By orderButtonBottom = By.xpath(".//button[@class='Button_Button__ra12g Button_UltraBig__UU3Lp']");
+    private By orderButtonBottom = By.xpath(".//div[@class='Home_FinishButton__1_cWm']/button[text()='Заказать']");
 
     // Заголовки вопросов в разделе «Вопросы о важном»
     private By accQuestions = By.xpath(".//*[@class='accordion__button']");

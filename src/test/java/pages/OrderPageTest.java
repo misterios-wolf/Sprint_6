@@ -4,9 +4,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import java.util.stream.Stream;
 
 public class OrderPageTest {
 
@@ -23,18 +26,32 @@ public class OrderPageTest {
         driver.quit();
     }
 
+    static Stream<Arguments> orderData() {
+        return Stream.of(
+                Arguments.of("Кирилл", "Семенов", "Санкт-Петербург, улица тест, 10", "89991234567", "header"),
+                Arguments.of("Иван", "Иванов", "Санкт-Петербург, улица тест, 20", "89998765432", "bottom")
+        );
+    }
+
     // Проверка заполнения формы - Для кого самокат
-    @Test
-    public void checkNextButton() {
+    @ParameterizedTest
+    @MethodSource("orderData")
+    public void checkNextButton(String name, String surname, String address, String phone, String button) {
         MainPage mainPage = new MainPage(driver);
-        mainPage.clickOrderButtonHeader();
+        mainPage.clickCookieButton();
+
+        if (button.equals("header")) {
+            mainPage.clickOrderButtonHeader();
+        } else {
+            mainPage.clickOrderButtonBottom();
+        }
 
         OrderPage orderPage = new OrderPage(driver);
-        orderPage.setName("Кирилл");
-        orderPage.setSurname("Семенов");
-        orderPage.setAddress("Санкт-Петербург, улица тест, 10");
+        orderPage.setName(name);
+        orderPage.setSurname(surname);
+        orderPage.setAddress(address);
         orderPage.setMetroStation();
-        orderPage.setPhone("89991234567");
+        orderPage.setPhone(phone);
         orderPage.clickNextButton();
 
         assertTrue(orderPage.isDeliveryDateDisplayed());
