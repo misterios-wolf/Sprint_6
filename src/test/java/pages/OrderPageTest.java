@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderPageTest {
 
@@ -34,9 +35,21 @@ public class OrderPageTest {
         orderPage.setAddress("Санкт-Петербург, улица тест, 10");
         orderPage.setMetroStation();
         orderPage.setPhone("89991234567");
-
         orderPage.clickNextButton();
 
         assertTrue(orderPage.isDeliveryDateDisplayed());
+        orderPage.setDeliveryDate("22.11.2026");
+        assertEquals("22.11.2026", orderPage.getDeliveryDate());
+        orderPage.clickRentalPeriodDropdown();
+        orderPage.setRentalPeriod("двое суток");
+        assertEquals("двое суток", orderPage.getRentalPeriod());
+        orderPage.selectBlackColor();
+        assertTrue(orderPage.isBlackColorSelected());
+        orderPage.setComment("Позвонить за 1 час до доставки");
+        assertEquals("Позвонить за 1 час до доставки", orderPage.getComment());
+        orderPage.clickOrderButton();
+
+        orderPage.clickConfirmOrderButton();
+        assertTrue(orderPage.isOrderSuccessDisplayed());
     }
 }

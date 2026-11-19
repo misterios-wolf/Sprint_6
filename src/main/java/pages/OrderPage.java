@@ -35,6 +35,9 @@ public class OrderPage {
     // Варианты срока аренды
     private By rentalPeriodOptions = By.xpath(".//*[@class='Dropdown-option']");
 
+    // Выбранный срок аренды
+    private By selectedRentalPeriod = By.xpath(".//div[@class='Dropdown-placeholder is-selected']");
+
     // Чекбокс «чёрный жемчуг»
     private By blackColorCheckbox = By.xpath(".//input[@id='black']");
 
@@ -49,6 +52,12 @@ public class OrderPage {
 
     // Кнопка «Заказать» на втором шаге формы
     private By orderButton = By.xpath(".//div[@class='Order_Buttons__1xGrp']/button[text()='Заказать']");
+
+    // Кнопка подтверждения заказа «Да»
+    private By confirmOrderButton = By.xpath(".//div[contains(@class, 'Order_Modal')]//button[text()='Да']");
+
+    // Заголовок успешного оформления заказа
+    private By orderSuccessHeader = By.xpath(".//div[@class='Order_ModalHeader__3FDaJ']");
 
     public OrderPage(WebDriver driver) {
         this.driver = driver;
@@ -98,8 +107,62 @@ public class OrderPage {
         driver.findElement(deliveryDateInput).sendKeys(Keys.ENTER);
     }
 
+    // Получение введённой даты доставки
+    public String getDeliveryDate() {
+        return driver.findElement(deliveryDateInput).getAttribute("value");
+    }
+
+    // Открытие списка «Срок аренды»
+    public void clickRentalPeriodDropdown() {
+        driver.findElement(rentalPeriodDropdown).click();
+    }
+
+    // Выбор срока аренды
+    public void setRentalPeriod(String period) {
+        driver.findElements(rentalPeriodOptions).stream()
+                .filter(option -> option.getText().equals(period))
+                .findFirst()
+                .get()
+                .click();
+    }
+
+    // Получение выбранного срока аренды
+    public String getRentalPeriod() {
+        return driver.findElement(selectedRentalPeriod).getText();
+    }
+
+    // Выбор чёрного цвета самоката
+    public void selectBlackColor() {
+        driver.findElement(blackColorCheckbox).click();
+    }
+
+    // Проверка выбора чёрного цвета самоката
+    public boolean isBlackColorSelected() {
+        return driver.findElement(blackColorCheckbox).isSelected();
+    }
+
+    // Ввод комментария для курьера
+    public void setComment(String comment) {
+        driver.findElement(commentInput).sendKeys(comment);
+    }
+
+    // Получение введённого комментария
+    public String getComment() {
+        return driver.findElement(commentInput).getAttribute("value");
+    }
+
     // Метод нажатия на кнопку «Заказать»
     public void clickOrderButton() {
         driver.findElement(orderButton).click();
+    }
+
+    // Метод подтверждения заказа
+    public void clickConfirmOrderButton() {
+        driver.findElement(confirmOrderButton).click();
+    }
+
+    // Проверка успешного оформления заказа
+    public boolean isOrderSuccessDisplayed() {
+        return driver.findElement(orderSuccessHeader).getText().contains("Заказ оформлен");
     }
 }
